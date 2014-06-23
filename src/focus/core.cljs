@@ -8,34 +8,43 @@
   (:import goog.net.EventType
            goog.History
            goog.history.EventType
-           [goog.net XhrIO]
            goog.events.EventType))
 
 (enable-console-print!)
 
-
 (def app-state (atom {:lapses 0 :breaks 0 :ratio 3}))
+
+(defn increment-state [data edit-key owner]
+  (om/transact! data edit-key (fn [x] (+ x 1))))
 
 (defn incremental-text [app owner]
   (reify
     om/IRenderState
     (render-state [this state]
       (html [:div
-             [:label "default"]
-             [:input {:type "text" :value (:num-key state)}]
-             [:button "+" {:on-click '()}]]))))
+             [:label (:label state)]
+             [:input {:type "text" :value ((:num-key state) app)}]
+             [:button {:on-click #(increment-state app (:num-key state) this)} "+"]]))))
 
-(def ratio (incremental-text "Ratio:" :ratio))
-
-(def breaks (incremental-text "Breaks:" :breaks))
-
-(def lapses (incremental-text "Lapses:" :lapses))
+(defn ratio-check [app owner]
+  (reify
+    om/IRender
+    (render [this]
+      (html [:div
+             (if (>= (:lapses app) (* (:breaks app) (:ratio app)))
+               [:div "You're doing well!"]
+               [:div "Try to focus a bit more!"])]))))
 
 (defn focus-view [app owner]
   (reify
     om/IRender
-    (render 
-      (map #(om/build incremental-text app {:init-state %}) [{:num-key :ratio} {:num-key :lapses} {:num-key :breaks}]))))
+    (render [this]
+      (html [:div
+             (map #(om/build incremental-text app {:init-state %})
+                  [{:label "Ratio:"  :num-key :ratio}
+                   {:label "Lapses:" :num-key :lapses}
+                   {:label "Breaks:" :num-key :breaks}])
+             (om/build ratio-check app)]))))
 
 (om/root focus-view app-state
   {:target (.getElementById js/document "focus")})
