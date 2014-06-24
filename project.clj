@@ -4,6 +4,7 @@
                  [org.clojure/clojurescript "0.0-2202"]
                  [om "0.5.0"]
                  [sablono "0.2.17"]
+                 [garden "1.1.8"]
                  [ring "1.2.2"]]
   :plugins [[lein-cljsbuild "1.0.3"]
             [lein-ring "0.8.10"]]
