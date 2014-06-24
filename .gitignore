@@ -10,3 +10,4 @@ pom.xml.asc
 *.swp
 *.swo
 /resources/public/dist
+resources/public/dist/
