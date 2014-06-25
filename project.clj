@@ -1,6 +1,6 @@
 (defproject focus "0.1.0-SNAPSHOT"
   :description "FIXME: write description"
-  :dependencies [[org.clojure/clojure "1.5.1"]
+  :dependencies [[org.clojure/clojure "1.6.0"]
                  [org.clojure/clojurescript "0.0-2202"]
                  [om "0.5.0"]
                  [sablono "0.2.17"]
